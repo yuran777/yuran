@@ -1,9 +1,8 @@
 # main links
-
 main:
   - title: "Home"
     url: "/"
   - title: "k8s"
-    url: /k8s/
-    - title: "cloud"
-    url: /cloud/
+    url: "/k8s/"
+  - title: "cloud"
+    url: "/cloud/"
