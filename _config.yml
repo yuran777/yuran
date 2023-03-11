@@ -67,8 +67,8 @@ main_navigation:
   - title: "kubernetes"
     url: /k8s/
 
-  - title: "학교"
-    url: /parent-2-page-url/
+  - title: "uni"
+    url: /uni/
     children:
       - title: "[2023-1학기 xxxx]"
         url: /uni/
