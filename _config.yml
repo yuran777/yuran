@@ -72,6 +72,49 @@ algolia:
 google:
   search_engine_id       : # YOUR_SEARCH_ENGINE_ID
   instant_search         : # false (default), true
+  
+# Navigation
+# Choose which pages, categories, or tags to include in the main navigation.
+# Order the links as they should appear in the navigation.
+#
+# Values: URL or full path of a page, category, or tag; "Home", "About", "Blog", "Archive", or "Categories" (built-in)
+#
+# Optional: Add "title" attribute to customize link text in the navigation, e.g. "Home" -> "Start"
+#
+# Example: ["Home", "About", "/blog/", {"Categories" => "category-name", "Custom Link" => "/custom-link/"}]
+#
+# main_navigation: ["Home", "k8s", "/uni/", "/cloud/"]
+main_navigation:
+  - title: "Home"
+    url: "/"
+    
+  - title: "kubernetes"
+    url: /k8s/
+
+  - title: "학교"
+    url: /parent-2-page-url/
+    children:
+      - title: "[2023-1학기 xxxx]"
+        url: /uni/
+      - title: "[2023-1학기 xxx]"
+        url: /child-2-page-url/
+      - title: "[2023-1학기 xxxxx]"
+        url: /child-3-page-url/
+      - title: "[2023-1학기 xxxxx]"
+        url: /child-3-page-url/
+        
+    - title: "클라우드"
+    url: /cloud/
+    children:
+      - title: "[2023-1학기 xxxx]"
+        url: /child-1-page-url/
+      - title: "[2023-1학기 xxx]"
+        url: /child-2-page-url/
+      - title: "[2023-1학기 xxxxx]"
+        url: /child-3-page-url/
+      - title: "[2023-1학기 xxxxx]"
+        url: /child-3-page-url/
+
 # SEO Related
 google_site_verification :
 bing_site_verification   :
