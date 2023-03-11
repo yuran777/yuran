@@ -19,7 +19,7 @@ locale                   : "en-US"
 title                    : "Yuran,Log"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "Your Name"
+name                     : "Yuran kim"
 description              : "직장인이면서 대학원생인, 갓생 지망러의 블로그입니다~!"
 url                      : "https://yuran777.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
