@@ -3,8 +3,9 @@
 main:
   - title: "Home"
     url: "/"
+    
   - title: "kubernetes"
-    url: /parent-1-page-url/
+    url: /k8s/
 
   - title: "학교"
     url: /parent-2-page-url/
