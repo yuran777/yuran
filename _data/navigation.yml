@@ -10,7 +10,7 @@ main:
   #   url: /collection-archive/
   # - title: "Sitemap"
   #   url: /sitemap/
-  Menu:
+  main:
   - title: "kubernetes"
     url: /parent-1-page-url/
 
@@ -18,7 +18,7 @@ main:
     url: /parent-2-page-url/
     children:
       - title: "[2023-1학기 xxxx]"
-        url: /child-1-page-url/
+        url: /uni/
       - title: "[2023-1학기 xxx]"
         url: /child-2-page-url/
       - title: "[2023-1학기 xxxxx]"
@@ -27,7 +27,7 @@ main:
         url: /child-3-page-url/
         
     - title: "클라우드"
-    url: /parent-2-page-url/
+    url: /cloud/
     children:
       - title: "[2023-1학기 xxxx]"
         url: /child-1-page-url/
