@@ -35,11 +35,6 @@ comments:
     shortname            : # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
     server               : # https://meta.discourse.org/t/embedding-discourse-comments-via-javascript/31963 , e.g.: meta.discourse.org
-  facebook:
-    # https://developers.facebook.com/docs/plugins/comments
-    appid                : # aa
-    num_posts            : # 5 (default)
-    colorscheme          : "light" (default), "dark"
   utterances:
     theme                : "github-light" (default), "github-dark"
     issue_term           : # "pathname" (default)
