@@ -59,13 +59,13 @@ google:
 #
 # Example: ["Home", "About", "/blog/", {"Categories" => "category-name", "Custom Link" => "/custom-link/"}]
 #
-# main_navigation: ["Home", "k8s", "/cloud/"]
+# main_navigation: ["Home", "/k8s/", "/cloud/"]
 main_navigation:
   - title: "Home"
     url: "/"
   - title: "k8s"
     url: /k8s/
-    - title: "cloud"
+  - title: "cloud"
     url: /cloud/
 
 # SEO Related
