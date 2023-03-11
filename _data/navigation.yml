@@ -7,26 +7,5 @@ main:
   - title: "kubernetes"
     url: /k8s/
 
-  - title: "uni"
-    url: /uni/
-    children:
-      - title: "[2023-1학기 xxxx]"
-        url: /uni/
-      - title: "[2023-1학기 xxx]"
-        url: /child-2-page-url/
-      - title: "[2023-1학기 xxxxx]"
-        url: /child-3-page-url/
-      - title: "[2023-1학기 xxxxx]"
-        url: /child-3-page-url/
-        
-    - title: "클라우드"
+    - title: "cloud"
     url: /cloud/
-    children:
-      - title: "[2023-1학기 xxxx]"
-        url: /child-1-page-url/
-      - title: "[2023-1학기 xxx]"
-        url: /child-2-page-url/
-      - title: "[2023-1학기 xxxxx]"
-        url: /child-3-page-url/
-      - title: "[2023-1학기 xxxxx]"
-        url: /child-3-page-url/
