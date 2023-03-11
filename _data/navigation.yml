@@ -2,7 +2,6 @@
 main:
   - title: "Home"
     url: "/"
-  - title: "k8s"
-    url: "/k8s/"
-  - title: "cloud"
-    url: "/cloud/"
+  - title: "About"
+    url: "/about/"
+
