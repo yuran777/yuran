@@ -3,9 +3,7 @@
 main:
   - title: "Home"
     url: "/"
-    
-  - title: "kubernetes"
+  - title: "k8s"
     url: /k8s/
-
     - title: "cloud"
     url: /cloud/
