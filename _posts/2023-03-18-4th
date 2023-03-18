@@ -1,0 +1,540 @@
+![](https://velog.velcdn.com/images/yuran3391/post/6e2f2d79-bc0b-4650-83e5-c2043d867ca1/image.png)
+
+
+
+> **이정훈님의 ‘24단계 실습으로 정복하는 쿠버네티스’ 기반으로 작성된 포스팅 입니다.**
+도서 링크 : http://www.yes24.com/Product/Goods/115187666
+![](https://velog.velcdn.com/images/yuran3391/post/429d18dd-2f0f-40c7-a1f8-789f8171ea5b/image.png)
+
+
+
+# 
+
+## 실습환경 배포
+- 마스터 노드 t3.medium (1h $0.052) & 워커 노드 c5d.large (1h $0.11) 배포 및 kops-ec2 인스턴스(t3.small)에 ⇒ 13분 후 kops-ec2 SSH 접속
+
+```
+# YAML 파일 다운로드
+curl -O https://s3.ap-northeast-2.amazonaws.com/cloudformation.cloudneta.net/K8S/kops-oneclick-f1.yaml
+
+# CloudFormation 스택 배포  
+aws cloudformation deploy \
+--template-file kops-oneclick-f1.yaml \
+--stack-name mykops \
+--parameter-overrides KeyName=yuran \ SgIngressSshCidr=$(curl -s ipinfo.io/ip)/32 \ MyIamUserAccessKeyID='ID' \ #access ID 입력
+MyIamUserSecretAccessKey='SECRET' \ #access key 입력 ClusterBaseName='yuran.link' \
+S3StateStore='yuran06141' \ MasterNodeInstanceType=t3.medium \ WorkerNodeInstanceType=c5d.large \
+--region ap-northeast-2
+
+
+Waiting for changeset to be created..
+Waiting for stack create/update to complete
+Successfully created/updated stack - mykops
+
+---
+
+# CloudFormation 스택 배포 완료 후 kOps EC2 IP 출력
+aws cloudformation describe-stacks --stack-name mykops --query 'Stacks[*].Outputs[0].OutputValue' --output text
+
+3.36.54.183
+---
+
+# 13분 후 작업 SSH 접속
+ssh -i ~/.ssh/yuran.pem ec2-user@$(aws cloudformation describe-stacks --stack-name mykops --query 'Stacks[*].Outputs[0].OutputValue' --output text)
+
+
+
+# EC2 instance profiles 에 IAM Policy 추가(attach) : 처음 입력 시 적용이 잘 안될 경우 다시 한번 더 입력 하자! - IAM Role에서 새로고침 먼저 확인!
+aws iam attach-role-policy --policy-arn arn:aws:iam::$ACCOUNT_ID:policy/AWSLoadBalancerControllerIAMPolicy --role-name masters.$KOPS_CLUSTER_NAME
+aws iam attach-role-policy --policy-arn arn:aws:iam::$ACCOUNT_ID:policy/AWSLoadBalancerControllerIAMPolicy --role-name nodes.$KOPS_CLUSTER_NAME
+aws iam attach-role-policy --policy-arn arn:aws:iam::$ACCOUNT_ID:policy/AllowExternalDNSUpdates --role-name masters.$KOPS_CLUSTER_NAME
+aws iam attach-role-policy --policy-arn arn:aws:iam::$ACCOUNT_ID:policy/AllowExternalDNSUpdates --role-name nodes.$KOPS_CLUSTER_NAME
+
+# 메트릭 서버 확인 : 메트릭은 15초 간격으로 cAdvisor를 통하여 가져옴
+kubectl top node
+kubectl top pod -A
+
+# LimitRanges 기본 정책 삭제
+kubectl describe limitranges # LimitRanges 기본 정책 확인 : 컨테이너는 기본적으로 0.1CPU(=100m vcpu)를 최소 보장(개런티)
+(yuran:N/A) [root@kops-ec2 ~]# kubectl delete limitranges limits
+limitrange "limits" deleted
+(yuran:N/A) [root@kops-ec2 ~]# kubectl get limitranges
+No resources found in default namespace.
+```
+
+# 쿠버네티스 네트워크
+**K8S CNI** : Container Network Interface 는 **k8s 네트워크 환경을 구성**해준다 - [링크](https://kubernetes.io/docs/concepts/cluster-administration/networking/),  다양한 플러그인이 존재 - [링크](https://kubernetes.io/docs/concepts/cluster-administration/addons/#networking-and-network-policy)
+
+**AWS VPC CNI** : **파드의 IP를 할당**해준다, 파드의 IP 네트워크 대역과 노드(워커)의 IP 대역이 같아서 **직접 통신이 가능**하다 - [Github](https://github.com/aws/amazon-vpc-cni-k8s)  [Proposal](https://github.com/aws/amazon-vpc-cni-k8s/blob/master/docs/cni-proposal.md)
+
+- supports native VPC networking with the Amazon VPC Container Network Interface (CNI) plugin for Kubernetes.
+- VPC 와 통합 : VPC Flow logs , VPC 라우팅 정책 사용 가능함 - [링크](https://reaperes.medium.com/security-group-%EC%9D%84-pod-%EB%8B%A8%EC%9C%84%EB%A1%9C-%ED%95%A0%EB%8B%B9%ED%95%98%EA%B8%B0-bef922065684)
+- This plugin assigns an IP address from your VPC to each pod.
+- VPC ENI 에 미리 할당된 IP를 파드에서 사용할 수 있음
+
+**K8S Calico CNI 와 AWS VPC CNI 차이**
+
+- 네트워크 통신의 최적화(성능, 지연)를 위해서 노드와 파드의 네트워크 대역을 동일하게 설정함
+
+
+![](https://velog.velcdn.com/images/yuran3391/post/fb704f65-8af7-4c3d-8632-8228d3657b74/image.png)
+
+- 파드간 통신 시 일반적으로 K8S CNI는 오버레이(VXLAN, IP-IP 등) 통신을 하고, AWS VPC CNI는 동일 대역으로 직접 통신을 한다
+
+![](https://velog.velcdn.com/images/yuran3391/post/ccd5fa3a-ee89-47a6-bd6f-8d57eb05b5c9/image.png)
+
+
+![](https://velog.velcdn.com/images/yuran3391/post/14938795-d39c-4c4b-9ead-44db749eb1ef/image.png)
+
+1. **Secondary IPv4 addresses** : 인스턴스 유형에 최대 ENI 갯수와 할당 가능 IP 수를 조합하여 선정
+2. **IPv4 Prefix Delegation** : IPv4 28bit 서브넷(prefix)를 위임하여 할당 가능 IP 수와 인스턴스 유형에 권장하는 최대 갯수로 선정
+
+
+3. AWS VPC CNI Custom Networking : 노드와 파드 대역 분리, 파드에 별도 서브넷 부여 후 사용  - Docs
+
+---
+```
+CNI 정보 확인
+
+(yuran:N/A) [root@kops-ec2 ~]# kubectl describe daemonset aws-node --namespace kube-system | grep Image | cut -d "/" -f 2
+amazon-k8s-cni-init:v1.12.2
+amazon-k8s-cni:v1.12.2
+
+# 노드 IP 확인
+(yuran:N/A) [root@kops-ec2 ~]# aws ec2 describe-instances --query "Reservations[*].Instances[*].{PublicIPAdd:PublicIpAddress,PrivateIPAdd:PrivateIpAddress,InstanceName:Tags[?Key=='Name']|[0].Value,Status:State.Name}" --filters Name=instance-state-name,Values=running --output table
+---------------------------------------------------------------------------------------------------
+|                                        DescribeInstances                                        |
++---------------------------------------------------+----------------+----------------+-----------+
+|                   InstanceName                    | PrivateIPAdd   |  PublicIPAdd   |  Status   |
++---------------------------------------------------+----------------+----------------+-----------+
+|  nodes-ap-northeast-2c.yuran.link                 |  172.30.71.1   |  54.180.150.64 |  running  |
+|  control-plane-ap-northeast-2a.masters.yuran.link |  172.30.43.126 |  3.34.95.115   |  running  |
+|  nodes-ap-northeast-2a.yuran.link                 |  172.30.61.129 |  3.39.227.108  |  running  |
+|  kops-ec2                                         |  10.0.0.10     |  3.36.54.183   |  running  |
++---------------------------------------------------+----------------+----------------+-----------+
+
+```
+
+```
+# 파드 IP 확인
+(yuran:N/A) [root@kops-ec2 ~]# kubectl get pod -n kube-system -o=custom-columns=NAME:.metadata.name,IP:.status.podIP,STATUS:.status.phase
+
+# 파드 이름 확인
+(yuran:N/A) [root@kops-ec2 ~]# kubectl get pod -A -o name
+
+# 파드 갯수 확인
+(yuran:N/A) [root@kops-ec2 ~]# kubectl get pod -A -o name | wc -l
+30
+```
+
+master node에 SSH 접속 후 CNI & 네트워크 정보 확인
+
+```
+# [master node] SSH 접속
+ssh -i ~/.ssh/id_rsa ubuntu@api.$KOPS_CLUSTER_NAME
+
+--------------------------------------------------
+# 툴 설치
+sudo apt install -y tree jq net-tools
+
+# CNI 정보 확인
+ls /var/log/aws-routed-eni
+cat /var/log/aws-routed-eni/plugin.log | jq
+cat /var/log/aws-routed-eni/ipamd.log | jq
+
+# 네트워크 정보 확인 : eniY는 pod network 네임스페이스와 veth pair
+ubuntu@i-07040c04f08ce4c7a:~$ ip -br -c addr
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+ens5             UP             172.30.43.126/19 fe80::19:d4ff:fe6b:2c8a/64
+nodelocaldns     DOWN           169.254.20.10/32
+enid6efc330369@if3 UP             fe80::9c50:f6ff:fe7f:1f3/64
+enie466d0c6d53@if3 UP             fe80::1:41ff:fe97:1b9d/64
+enib8aea10e14a@if3 UP             fe80::24ce:e9ff:fe65:6d81/64
+enifb94c3f693c@if3 UP             fe80::f0b5:40ff:fe39:d4c5/64
+
+ubuntu@i-07040c04f08ce4c7a:~$ ip -c addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+       ...
+       
+ubuntu@i-07040c04f08ce4c7a:~$ ip -c route
+default via 172.30.32.1 dev ens5 proto dhcp src 172.30.43.126 metric 100
+172.30.32.0/19 dev ens5 proto kernel scope link src 172.30.43.126
+172.30.32.1 dev ens5 proto dhcp scope link src 172.30.43.126 metric 100
+172.30.55.32 dev enid6efc330369 scope link
+172.30.55.33 dev enie466d0c6d53 scope link
+172.30.55.34 dev enib8aea10e14a scope link
+172.30.55.35 dev enifb94c3f693c scope link
+
+ubuntu@i-07040c04f08ce4c7a:~$ sudo iptables -t nat -S
+ubuntu@i-07040c04f08ce4c7a:~$ sudo iptables -t nat -L -n -v
+
+# 빠져나오기
+exit
+--------------------------------------------------
+```
+- 워커 노드에 SSH 접속 후 확인 : 워커 노드의 public ip 로 SSH 접속
+```
+# 워커 노드 Public IP 확인
+(yuran:N/A) [root@kops-ec2 ~]# aws ec2 describe-instances --query "Reservations[*].Instances[*].{PublicIPAdd:PublicIpAddress,InstanceName:Tags[?Key=='Name']|[0].Value}" --filters Name=instance-state-name,Values=running --output table
+-----------------------------------------------------------------------
+|                          DescribeInstances                          |
++----------------------------------------------------+----------------+
+|                    InstanceName                    |  PublicIPAdd   |
++----------------------------------------------------+----------------+
+|  nodes-ap-northeast-2c.yuran.link                  |  54.180.150.64 |
+|  control-plane-ap-northeast-2a.masters.yuran.link  |  3.34.95.115   |
+|  nodes-ap-northeast-2a.yuran.link                  |  3.39.227.108  |
+|  kops-ec2                                          |  3.36.54.183   |
++----------------------------------------------------+----------------+
+
+# 워커 노드 Public IP 변수 지정
+W1PIP=<워커 노드 1 Public IP>
+W2PIP=<워커 노드 2 Public IP>
+W1PIP=54.180.150.64
+W2PIP=3.39.227.108
+```
+- 워커 노드1
+```
+# 워커 노드 SSH 접속
+ssh -i ~/.ssh/id_rsa ubuntu@$W1PIP
+
+# 툴 설치
+sudo apt install -y tree jq net-tools
+
+# CNI 정보 확인
+ls /var/log/aws-routed-eni
+cat /var/log/aws-routed-eni/plugin.log | jq
+cat /var/log/aws-routed-eni/ipamd.log | jq
+
+# 네트워크 정보 확인
+ubuntu@i-09c723789d1544573:~$ ip -br -c addr
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+ens5             UP             172.30.71.1/19 fe80::821:3eff:feb7:b2ba/64
+nodelocaldns     DOWN           169.254.20.10/32
+eni36a1bd8dc1a@if3 UP             fe80::d091:b8ff:fede:aca1/64
+eni98a8d6a8be6@if3 UP             fe80::2420:14ff:fe2e:4a7/64
+eni1d24a007ad8@if3 UP             fe80::98d1:80ff:feb3:1bc0/64
+enif3cad2a9084@if3 UP             fe80::243c:80ff:fef2:5651/64
+enie1175812f9e@if3 UP             fe80::4882:cbff:fe19:7607/64
+eni172cf14ba67@if3 UP             fe80::ec3a:96ff:fe15:ed71/64
+ubuntu@i-09c723789d1544573:~$ ip -c addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: ens5: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9001 qdisc mq state UP group default qlen 1000
+    link/ether 0a:21:3e:b7:b2:ba brd ff:ff:ff:ff:ff:ff
+    altname enp0s5
+    inet 172.30.71.1/19 brd 172.30.95.255 scope global dynamic ens5
+       valid_lft 3204sec preferred_lft 3204sec
+    inet6 fe80::821:3eff:feb7:b2ba/64 scope link
+    ...
+    
+ubuntu@i-09c723789d1544573:~$ ip -c route
+default via 172.30.64.1 dev ens5 proto dhcp src 172.30.71.1 metric 100
+172.30.64.0/19 dev ens5 proto kernel scope link src 172.30.71.1
+172.30.64.1 dev ens5 proto dhcp scope link src 172.30.71.1 metric 100
+172.30.88.48 dev eni36a1bd8dc1a scope link
+172.30.88.49 dev eni98a8d6a8be6 scope link
+172.30.88.50 dev eni1d24a007ad8 scope link
+172.30.88.51 dev enif3cad2a9084 scope link
+172.30.88.52 dev enie1175812f9e scope link
+172.30.88.53 dev eni172cf14ba67 scope link
+
+sudo iptables -t nat -S
+sudo iptables -t nat -L -n -v
+
+# 빠져나오기
+exit
+--------------------------------------------------
+```
+
+- 워커 노드2
+```
+# 워커 노드 SSH 접속
+ssh -i ~/.ssh/id_rsa ubuntu@$W2PIP
+
+# 툴 설치
+sudo apt install -y tree jq net-tools
+
+# CNI 정보 확인
+ls /var/log/aws-routed-eni
+cat /var/log/aws-routed-eni/plugin.log | jq
+cat /var/log/aws-routed-eni/ipamd.log | jq
+
+# 네트워크 정보 확인
+ubuntu@i-007a0af303c2d35f4:~$ ip -br -c addr
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+ens5             UP             172.30.61.129/19 fe80::c9:aff:fe77:a54e/64
+nodelocaldns     DOWN           169.254.20.10/32
+enib7c31fd13d7@if3 UP             fe80::cc61:bfff:fec5:405c/64
+enif3eb734c294@if3 UP             fe80::442b:e7ff:fe6b:63f2/64
+eni0a7428b943c@if3 UP             fe80::c8a:baff:fe3d:4a5d/64
+ubuntu@i-007a0af303c2d35f4:~$ ip -c route
+default via 172.30.32.1 dev ens5 proto dhcp src 172.30.61.129 metric 100
+172.30.32.0/19 dev ens5 proto kernel scope link src 172.30.61.129
+172.30.32.1 dev ens5 proto dhcp scope link src 172.30.61.129 metric 100
+172.30.54.240 dev enib7c31fd13d7 scope link
+172.30.54.241 dev enif3eb734c294 scope link
+172.30.54.242 dev eni0a7428b943c scope link
+
+sudo iptables -t nat -S
+sudo iptables -t nat -L -n -v
+
+# 빠져나오기
+exit
+```
+각 노드의 IP 와 노드에 실행중이 POD 의 IP 대역이 같음을 확인 가능
+
+
+
+### 2. **노드에서 기본 네트워크 정보 확인**
+
+**워커 노드1 기본 네트워크 구성** : 
+
+![](https://velog.velcdn.com/images/yuran3391/post/774919d8-bcd1-4ff2-a0ba-655176c8cce8/image.png)
+
+
+- Network 네임스페이스는 호스트(Root)와 파드 별(Per Pod)로 구분된다
+- 특정한 파드(kube-proxy, aws-node)는 호스트(Root)의 IP를 그대로 사용한다
+- t3.medium 의 경우 ENI 마다 최대 6개의 IP를 가질 수 있다
+- ENI0, ENI1 으로 2개의 ENI는 자신의 IP 이외에 추가적으로 5개의 보조 프라이빗 IP를 가질수 있다
+- coredns 파드는 veth 으로 호스트에는 eniY@ifN 인터페이스와 파드에 eth0 과 연결되어 있다
+
+`워커 노드1` **인스턴스의 네트워크 정보 확인 :** 프라이빗 IP와 보조 프라이빗 IP 확인
+
+
+---
+
+```
+(yuran:N/A) [root@kops-ec2 ~]#
+(yuran:N/A) [root@kops-ec2 ~]# kubectl get pod -n kube-system -l app=ebs-csi-node -owide
+NAME                 READY   STATUS    RESTARTS   AGE   IP              NODE                  NOMINATED NODE   READINESS GATES
+ebs-csi-node-8qs5m   3/3     Running   0          73m   172.30.88.48    i-09c723789d1544573   <none>           <none>
+ebs-csi-node-k9sjh   3/3     Running   0          77m   172.30.55.32    i-07040c04f08ce4c7a   <none>           <none>
+ebs-csi-node-wf7kl   3/3     Running   0          73m   172.30.54.240   i-007a0af303c2d35f4   <none>           <none>
+(yuran:N/A) [root@kops-ec2 ~]# ssh -i ~/.ssh/id_rsa ubuntu@api.$KOPS_CLUSTER_NAME ip -c route
+default via 172.30.32.1 dev ens5 proto dhcp src 172.30.43.126 metric 100
+172.30.32.0/19 dev ens5 proto kernel scope link src 172.30.43.126
+172.30.32.1 dev ens5 proto dhcp scope link src 172.30.43.126 metric 100
+172.30.55.32 dev enid6efc330369 scope link
+172.30.55.33 dev enie466d0c6d53 scope link
+172.30.55.34 dev enib8aea10e14a scope link
+172.30.55.35 dev enifb94c3f693c scope link
+(yuran:N/A) [root@kops-ec2 ~]# ssh -i ~/.ssh/id_rsa ubuntu@$W1PIP ip -c route
+default via 172.30.64.1 dev ens5 proto dhcp src 172.30.71.1 metric 100
+172.30.64.0/19 dev ens5 proto kernel scope link src 172.30.71.1
+172.30.64.1 dev ens5 proto dhcp scope link src 172.30.71.1 metric 100
+172.30.88.48 dev eni36a1bd8dc1a scope link
+172.30.88.49 dev eni98a8d6a8be6 scope link
+172.30.88.50 dev eni1d24a007ad8 scope link
+172.30.88.51 dev enif3cad2a9084 scope link
+172.30.88.52 dev enie1175812f9e scope link
+172.30.88.53 dev eni172cf14ba67 scope link
+(yuran:N/A) [root@kops-ec2 ~]# ssh -i ~/.ssh/id_rsa ubuntu@$W2PIP ip -c route
+default via 172.30.32.1 dev ens5 proto dhcp src 172.30.61.129 metric 100
+172.30.32.0/19 dev ens5 proto kernel scope link src 172.30.61.129
+172.30.32.1 dev ens5 proto dhcp scope link src 172.30.61.129 metric 100
+172.30.54.240 dev enib7c31fd13d7 scope link
+172.30.54.241 dev enif3eb734c294 scope link
+172.30.54.242 dev eni0a7428b943c scope link
+```
+
+```
+[root@kops-ec2 ~]# cat <<EOF | kubectl create -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netshoot-pod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: netshoot-pod
+  template:
+    metadata:
+      labels:
+        app: netshoot-pod
+    spec:
+      containers:
+      - name: netshoot-pod
+        image: nicolaka/netshoot
+        command: ["tail"]
+        args: ["-f", "/dev/null"]
+      terminationGracePeriodSeconds: 0
+EOF
+
+
+[root@kops-ec2 ~]# PODNAME1=$(kubectl get pod -l app=netshoot-pod -o jsonpath={.items[0].metadata.name})
+[root@kops-ec2 ~]# PODNAME2=$(kubectl get pod -l app=netshoot-pod -o jsonpath={.items[1].metadata.name})
+
+(yuran:N/A) [root@kops-ec2 ~]# kubectl get pod -o wide
+NAME                            READY   STATUS    RESTARTS   AGE     IP              NODE                  NOMINATED NODE   READINESS GATES
+netshoot-pod-7757d5dd99-6ftxj   1/1     Running   0          3m54s   172.30.54.243   i-007a0af303c2d35f4   <none>           <none>
+netshoot-pod-7757d5dd99-hq7bc   1/1     Running   0          3m54s   172.30.88.54    i-09c723789d1544573   <none>           <none>
+(yuran:N/A) [root@kops-ec2 ~]# kubectl get pod -o=custom-columns=NAME:.metadata.name,IP:.status.podIP
+NAME                            IP
+netshoot-pod-7757d5dd99-6ftxj   172.30.54.243
+netshoot-pod-7757d5dd99-hq7bc   172.30.88.54
+```
+파드가 생성되면, 워커 노드에 eniY@ifN 추가되고 라우팅 테이블에도 정보가 추가된다
+
+---
+
+
+
+### . 노드에 파드 생성 갯수 제한
+
+**Secondary IPv4 addresses** : 인스턴스 유형에 최대 ENI 갯수와 할당 가능 IP 수를 조합하여 선정
+
+**워커 노드의 인스턴스 타입 별 파드 생성 갯수 제한**
+
+- **인스턴스 타입** 별 ENI 최대 갯수와 할당 가능한 최대 IP 갯수에 따라서 파드 배치 갯수가 결정됨
+- 단, aws-node 와 kube-proxy 파드는 호스트의 IP를 사용함으로 최대 갯수에서 제외함
+
+- 워커 노드의 인스턴스 정보 확인 : t3. 사용 시, c5. 사용시
+```
+
+(yuran:N/A) [root@kops-ec2 ~]# aws ec2 describe-instance-types --filters Name=instance-type,Values=t3.* \
+>  --query "InstanceTypes[].{Type: InstanceType, MaxENI: NetworkInfo.MaximumNetworkInterfaces, IPv4addr: NetworkInfo.Ipv4AddressesPerInterface}" \
+>  --output table
+--------------------------------------
+|        DescribeInstanceTypes       |
++----------+----------+--------------+
+| IPv4addr | MaxENI   |    Type      |
++----------+----------+--------------+
+|  15      |  4       |  t3.2xlarge  |
+|  15      |  4       |  t3.xlarge   |
+|  12      |  3       |  t3.large    |
+|  6       |  3       |  t3.medium   |
+|  2       |  2       |  t3.nano     |
+|  2       |  2       |  t3.micro    |
+|  4       |  3       |  t3.small    |
++----------+----------+--------------+
+
+(yuran:N/A) [root@kops-ec2 ~]# aws ec2 describe-instance-types --filters Name=instance-type,Values=c5*.* \
+  --query "InstanceTypes[].{Type: InstanceType, MaxENI: NetworkInfo.MaximumNetworkInterfaces, IPv4addr: NetworkInfo.Ipv4AddressesPerInterface}" \ --output table
+----------------------------------------
+|         DescribeInstanceTypes        |
++----------+----------+----------------+
+| IPv4addr | MaxENI   |     Type       |
++----------+----------+----------------+
+|  30      |  8       |  c5.4xlarge    |
+|  30      |  8       |  c5a.4xlarge   |
+|  15      |  4       |  c5.xlarge     |
+|  30      |  8       |  c5d.12xlarge  |
+|  10      |  3       |  c5n.large     |
+|  10      |  3       |  c5d.large     |
+|  15      |  4       |  c5n.2xlarge   |
+|  30      |  8       |  c5n.4xlarge   |
+|  50      |  15      |  c5d.18xlarge  |
+|  50      |  15      |  c5n.18xlarge  |
+|  50      |  15      |  c5.24xlarge   |
+|  30      |  8       |  c5d.4xlarge   |
+|  50      |  15      |  c5d.24xlarge  |
+|  50      |  15      |  c5a.24xlarge  |
+|  50      |  15      |  c5.metal      |
+|  30      |  8       |  c5a.12xlarge  |
+|  30      |  8       |  c5.12xlarge   |
+|  15      |  4       |  c5a.2xlarge   |
+|  15      |  4       |  c5d.2xlarge   |
+|  15      |  4       |  c5a.xlarge    |
+|  30      |  8       |  c5n.9xlarge   |
+|  15      |  4       |  c5.2xlarge    |
+|  30      |  8       |  c5a.8xlarge   |
+|  10      |  3       |  c5.large      |
+|  30      |  8       |  c5.9xlarge    |
+|  50      |  15      |  c5d.metal     |
+|  50      |  15      |  c5a.16xlarge  |
+|  15      |  4       |  c5d.xlarge    |
+|  50      |  15      |  c5n.metal     |
+|  15      |  4       |  c5n.xlarge    |
+|  30      |  8       |  c5d.9xlarge   |
+|  10      |  3       |  c5a.large     |
+|  50      |  15      |  c5.18xlarge   |
++----------+----------+----------------+
+```
+
+- 파드 사용 가능 계산 예시 : aws-node 와 kube-proxy 파드는 host-networking 사용으로 IP 2개 남음
+
+((MaxENI * (IPv4addr-1)) + 2)
+t3.medium 경우 : ((3 * (6 - 1) + 2 ) = 17개 >> aws-node 와 kube-proxy 2개 제외하면 15개
+
+- 워커노드 상세 정보 확인 : 노드 상세 정보의 Allocatable 에 pods 에 17개 정보 확인
+```
+
+
+```
+
+---
+## 최대 파드 생성 및 확인
+```
+
+# 작업용 EC2 - 터미널1
+watch -d 'kubectl get pods -o wide'
+
+# 작업용 EC2 - 터미널2
+# 디플로이먼트 생성
+cat ~/pkos/2/nginx-dp.yaml | yh
+kubectl apply -f ~/pkos/2/nginx-dp.yaml
+
+#노드 확인
+(yuran:N/A) [root@kops-ec2 ~]# kubectl describe node | grep Allocatable: -A6
+Allocatable:
+  cpu:                2
+  ephemeral-storage:  119703055367
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3670004Ki
+  pods:               100
+--
+Allocatable:
+  cpu:                2
+  ephemeral-storage:  59763732382
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3854320Ki
+  pods:               100
+--
+Allocatable:
+  cpu:                2
+  ephemeral-storage:  119703055367
+  hugepages-1Gi:      0
+  hugepages-2Mi:      0
+  memory:             3698684Ki
+  pods:               100
+  
+# 파드 확인
+kubectl get pod -o wide
+kubectl get pod -o=custom-columns=NAME:.metadata.name,IP:.status.podIP
+
+# 파드 증가 테스트 >> 파드 정상 생성 확인, 워커 노드에서 eth, eni 갯수 확인
+(yuran:N/A) [root@kops-ec2 ~]# kubectl scale deployment nginx-deployment --replicas=200deployment.apps/nginx-deployment scaled
+(yuran:N/A) [root@kops-ec2 ~]# kubectl get pod | grep Running | wc -l
+187
+
+# 파드 생성 실패!
+(yuran:N/A) [root@kops-ec2 ~]# kubectl get pods | grep Pending
+nginx-deployment-6fb79bc456-5l27d   0/1     Pending   0          4m58s
+
+
+...
+
+kubectl describe pod <Pending 파드> 
+
+Events:
+  Type     Reason            Age                  From               Message
+  ----     ------            ----                 ----               -------
+  Warning  FailedScheduling  71s (x2 over 6m31s)  default-scheduler  0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }, 2 Too many pods. preemption: 0/3 nodes are available: 1 Preemption is not helpful for scheduling, 2 No preemption victims found for incoming pod.
+
+# 디플로이먼트 삭제
+kubectl delete deploy nginx-deployment
+```
+
