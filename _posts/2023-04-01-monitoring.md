@@ -376,3 +376,64 @@ kubectl apply -f https://raw.githubusercontent.com/abahmed/kwatch/v0.8.3/deploy/
 ```
 
 ![](https://velog.velcdn.com/images/yuran3391/post/5e215fd4-b843-435e-9761-8e17ca14364e/image.png)
+
+
+---
+### Alerting 프로메테우스 얼럿매니저
+프로메테우스의 임곗값 도달 시 경고 메시지를 얼럿매니저에 푸시 이벤트로 전달하고, 얼럿매지저는 이를 가공후 이메일/슬랙 등에 전달 
+![](https://velog.velcdn.com/images/yuran3391/post/20602fbf-e0d8-4551-9c65-ca4fc47ba8ab/image.png)
+
+- 워커 노드 3번 추가 
+
+```
+# EC2 인스턴스 모니터링
+while true; do aws ec2 describe-instances --query "Reservations[*].Instances[*].{PublicIPAdd:PublicIpAddress,InstanceName:Tags[?Key=='Name']|[0].Value,Status:State.Name}" --output text | sort; echo "------------------------------" ;date; sleep 1; done
+
+# 인스턴스그룹 정보 확인
+kops get ig
+
+# 노드 추가
+kops edit ig nodes-ap-northeast-2a --set spec.minSize=2 --set spec.maxSize=2
+
+# 적용
+kops update cluster --yes && echo && sleep 3 && kops rolling-update cluster
+
+# 워커노드 증가 확인
+while true; do kubectl get node; echo "------------------------------" ;date; sleep 1; done
+```
+
+- 얼럿매니저 웹 접속 & 얼럿매니저 대시보드 karma 사용 
+
+```
+# ingress 도메인으로 웹 접속
+echo -e "Alertmanager Web URL = https://alertmanager.$KOPS_CLUSTER_NAME"
+```
+
+
+
+![](https://velog.velcdn.com/images/yuran3391/post/72cb27bb-89c4-406f-8b08-bc5d9251f417/image.png)
+
+1. Alerts 경고: 시스템 문제 시 프로메테우스가 전달한 경고 메시지 목록을 확인
+2. Silences 일시 중지 : 계획 된 장애 작업 시 일정 기간 동안 경고 메시지를 받지 않을 때, 메시지별로 경고 메시지를 일시 중단 설정
+3. Statue 상태 : 얼럿매니저 상세 설정 확인
+
+- 얼럿매니저 대시보드 karma 컨테이너로 실행 
+
+```
+# 실행
+docker run -d -p 80:8080 -e ALERTMANAGER_URI=https://alertmanager.$KOPS_CLUSTER_NAME ghcr.io/prymitive/karma:latest
+
+# 확인
+docker ps
+```
+
+- [자신의 PC] 얼럿매니저 대시보드 karma 웹 접속 주소 확인
+
+```
+ ~  #                                                                                                                                                           ok  10:34:25 PM
+echo -e "karma Web URL = http://$(aws cloudformation describe-stacks --stack-name mykops --query 'Stacks[*].Outputs[0].OutputValue' --output text)"
+karma Web URL = http://3.36.61.187
+```
+
+![](https://velog.velcdn.com/images/yuran3391/post/ad973bdb-07dc-4644-9ff5-70231bdb5b5d/image.png)
+
