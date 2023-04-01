@@ -250,6 +250,7 @@ Configuration → Data sources : 스택의 경우 자동으로 프로메테우�
 
 ![](https://velog.velcdn.com/images/yuran3391/post/11fa1673-6a4a-45ba-a9bd-47c47b0d5d30/image.png)
 - 해당 서비스에 접속
+
 ```
 # 테스트용 파드 배포
 kubectl apply -f ~/pkos/2/netshoot-2pods.yaml
@@ -291,6 +292,7 @@ https://containerjournal.com/topics/container-management/cluster-monitoring-with
 - 기존 애플리케이션 파드에 프로메테우스 모니터링을 추가하려면 사이드카 방식을 사용하며 exporter 컨테이너를 추가!
 - nginx 웹 서버 helm 설치 - [Helm](https://artifacthub.io/packages/helm/bitnami/nginx)
 
+
 ```
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
@@ -331,6 +333,7 @@ kubectl logs deploy/nginx -f
 # 반복 접속
 while true; do curl -s http://nginx.$KOPS_CLUSTER_NAME -I | head -n 1; date; sleep 1; done
 ```
+
 - 서비스 모니터링 생성 후 1분 정도 후에 프로메테우스 웹서버에서 State → Targets 에 nginx 서비스 모니터 추가 확인
 ![](https://velog.velcdn.com/images/yuran3391/post/9e7c74a0-94b4-4fbf-9cfc-e70524ad5fd4/image.png)
 
