@@ -11,6 +11,7 @@ title:  "[PKOS STUDY #4] - Prometheus & Grafana"
 
 ## 실습환경 배포
 - kops 인스턴스 t3.small & 노드 c5a.2xlarge (AMD vCPU 8, Memory 16GiB) 배포 : 이번주 실습에서 성능을 요구하는 파드를 사용함
+
 ```
 # YAML 파일 다운로드
 curl -O https://s3.ap-northeast-2.amazonaws.com/cloudformation.cloudneta.net/K8S/kops-oneclick-f1.yaml
