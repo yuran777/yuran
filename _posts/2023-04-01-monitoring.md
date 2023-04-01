@@ -186,7 +186,8 @@ kubectl get crd | grep monitoring
 - 모니터링 대상이 되는 서비스는 일반적으로 자체 웹 서버의 /metrics 엔드포인트 경로에 다양한 메트릭 정보를 노출
 - 이후 프로메테우스는 해당 경로에 http get 방식으로 메트릭 정보를 가져와 TSDB 형식으로 저장
 
-```아래 처럼 프로메테우스가 각 서비스의 9100 접속하여 메트릭 정보를 수집
+```
+아래 처럼 프로메테우스가 각 서비스의 9100 접속하여 메트릭 정보를 수집
 kubectl get node -owide
 kubectl get svc,ep -n monitoring kube-prometheus-stack-prometheus-node-exporter
 
