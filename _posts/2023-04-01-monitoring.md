@@ -1,3 +1,8 @@
+---
+layout: single
+title:  "[PKOS STUDY #4] - Prometheus & Grafana"
+---
+
 ![](https://velog.velcdn.com/images/yuran3391/post/c1548ed2-6563-49f5-b738-0be5bb4d7feb/image.png)
 
 > **이정훈님의 ‘24단계 실습으로 정복하는 쿠버네티스’ 기반으로 작성된 포스팅 입니다.**
