@@ -242,6 +242,7 @@ polaris 웹 접속 → 중간 Filter by Namespace 에서 default 네임스페이
 
 
 - image tag 조치
+
 ```
 # 기존 netshoot-pod 삭제
 kubectl delete deploy netshoot-pod
