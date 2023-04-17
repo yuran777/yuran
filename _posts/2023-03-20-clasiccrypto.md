@@ -1,3 +1,8 @@
+---
+layout: single
+title:  "고전 암호"
+---
+
 ## 고전 암호 기술
 
 - Symmetric Cipher Model >> 송신자 & 수신자가 동등하다
