@@ -7,7 +7,8 @@ tags:
   - front-end
   - application build
   - deploy 
-
+categories:
+  - aws 
 ---
 완성 아키텍처 
 ![](https://images.velog.io/images/yuran3391/post/8b768966-6a99-4f93-a75e-4cf139d4cda6/aws-3.jpg)
