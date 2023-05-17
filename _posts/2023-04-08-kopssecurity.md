@@ -1,6 +1,9 @@
 ---
 layout: single
 title:  "[PKOS STUDY #5] - 쿠버네티스 보안"
+toc_sticky: true
+toc_label: "페이지 주요 목차"
+
 ---
 
 ![](https://velog.velcdn.com/images/yuran3391/post/c1548ed2-6563-49f5-b738-0be5bb4d7feb/image.png)
