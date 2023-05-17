@@ -1,0 +1,274 @@
+---
+title: "API 애플리케이션 빌드와 배포"
+type: single
+tags:
+  - aws
+categories:
+  - aws
+---
+완성 아키텍처 
+![](https://images.velog.io/images/yuran3391/post/8b768966-6a99-4f93-a75e-4cf139d4cda6/aws-3.jpg)
+
+- 본 포스팅은 클라우드 네이티브를 위한 쿠버네티스 실전 프로젝트 내용을 기반으로 작성 되었습니다.
+- 소스 코드를 아래 깃헙에서 다운 받은 후 작업해주세요.https://github.com/yuran777/k8s-aws-book.git
+
+## 4. API 애플리케이션 빌드와 배포 
+### 4.1 필요 도구 준비
+- AWS에서 애플리케이션을 동작시키기에 AWS 친화적인 오픈JDK인 Amazon Cooretto를 설치합니다.
+- 자바 버전은 LTS 버전인 11을 이용합니다.
+- 컨테이너 이미지를 푸시하기 위헤 도커데스크톱을 설치합니다.
+
+#### 4.1.1 Amazon Corretto 11 다운로드
+https://docs.aws.amazon.com/ko_kr/corretto/latest/corretto-11-ug/macos-install.html
+위 링크 가이드에 따라 다운 후 java -version, javac -version 명령어로 잘 설치 되었는지 확인해 봅니다.
+~~~bash
+java -version
+
+openjdk version "11.0.14.1" 2022-02-08 LTS
+OpenJDK Runtime Environment Corretto-11.0.14.10.1 (build 11.0.14.1+10-LTS)
+OpenJDK 64-Bit Server VM Corretto-11.0.14.10.1 (build 11.0.14.1+10-LTS, mixed mode)
+
+javac -version
+javac 11.0.14.1
+~~~
+#### 4.1.2 JAVA_HOME 환경 변수 설정
+Amazon Corretto 설치 작업이 끝났다면 마지막으로 JAVA_HOME 환경 변수를 설정합니다.
+~~~bahs
+echo 'export JAVA_HOME=$(/usr/libexec/java_home -v 11)' >> ~/.zprofile
+~~~
+
+
+#### 4.1.3 도커 데스크톱 다운로드
+아래 사이트에서 다운 받은 후
+https://www.docker.com/products/docker-desktop
+
+docker version 명령어를 통해 잘 설치 되었는지 확인해 봅니다.
+~~~bash
+docker version                  
+Client:
+ Cloud integration: v1.0.22
+ Version:           20.10.12
+ API version:       1.41
+ Go version:        go1.16.12
+ Git commit:        e91ed57
+ Built:             Mon Dec 13 11:46:56 2021
+ OS/Arch:           darwin/amd64
+ Context:           default
+ Experimental:      true
+
+Server: Docker Desktop 4.5.0 (74594)
+ Engine:
+  Version:          20.10.12
+  API version:      1.41 (minimum version 1.12)
+  Go version:       go1.16.12
+  Git commit:       459d0df
+  Built:            Mon Dec 13 11:43:56 2021
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.4.12
+  GitCommit:        7b11cfaabd73bb80907dd23182b9347b4245eb5d
+ runc:
+  Version:          1.0.2
+  GitCommit:        v1.0.2-0-g52b36a2
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+~~~
+
+
+### 4.2 소스 코드 빌드와 컨테이너 이미지 생성
+#### 4.2.1 소스 코드 빌드
+
+소스 코드 빌드네는 자바 애플리케이션용 빌드 도구인 그래들을 이용합니다. 그래들은 기본적으로 독립된 도구로 설치해서 사용하지만, 그래들 래퍼라는 구조를 사용하면 그래들이 미설치된 환경에서도 필요한 라이브러리를 자동적으로 다운로드하고 빌드할 수 있습니다.
+
+```bash
+cd <위에 깃헙 링크를 통해 다운받은 파일의 위치>/backend-app
+sudo chmod 755 ./gradlew
+./gradlew clean build
+```
+
+위의 명령어를 실행하여 정상적으로 빌드 되면 콘솔에 'BUILD SUCCESSFUL'이라고 표시되며 다음 작업이 수행됨
+- 의존성 라이브러리 다운로드
+- 프로그램 컴파일
+- 테스트 프로그램 컴파일
+- 테스트 실행
+- 프로그램 실행용 아카이브 파일 생성
+
+또한, Bckend-app/build/libs/backend-app-1.0.0.jar 파일이 생성됨
+
+#### 4.2.2 컨테이너 이미지 생성
+컨테이너 이미지를 정의하는 dockerfile을 생성하고 docker build 명령어 사용
+
+~~~bash
+sudo docker build -t k8sbook/batch-app:1.0.0 --build-arg \
+JAR_FILE=build/libs/batch-app-1.0.0.jar .
+~~~
+
+### 4.3 컨테이너 레지스트리 준비
+
+aws management console > amazon container service > amazon ecr > '레포지토리 생성' 클릭
+
+'리포지토리 이름' 항목에 k8sbook/backend-app (namespace/repo-name) 입력 후 클릭 클릭 해서 레포지토리 생성 
+
+생성 시 
+'<어카운트 id>.dkr.ecr.ap-northeast-2.amazonaws.com/k8sbook/backend-app' 형태의 레파지토리 주소가 생성되며 이는 컨테이너 이미지를 푸시/풀 할때 설정함
+
+
+
+### 4.4 컨테이너 이미지 푸시
+
+#### 4.4.1 ECR 로그인
+
+
+~~~ bash
+aws ecr get login-password --region ap-northeast-2 | \
+docker login --username AWS --password-stdin \
+<어카운트 id>.dkr.ecr.ap-northeast-2.amazonaws.com
+~~~
+
+
+#### 4.4.2 컨테이너 이미지 태그 설정과 푸시
+
+4.4.1 과정을 통해 ecr에 로그인 되었다면 이제는 컨테이너 이미지를 이미지를 저장
+
+- docker tag 명령으로 컨테이너 이미지에 태그 설정
+- 해당 태그에 대해 docker push 명령 실행 
+
+- docker tag 명령으로 컨테이너 이미지에 태그 설정
+
+~~~bash
+docker tag k8sbook/batch-app:1.0.0 <aws account id>.dkr.ecr.ap-northeast-2.amazonaws.com/yuran/batch-app:1.0.0
+~~~
+
+
+- 해당 태그에 대해 docker push 명령 실행 
+
+~~~bash
+docker push <aws account id>.dkr.ecr.ap-northeast-2.amazonaws.com/k8sbook/batch-app:1.0.0
+~~~
+실행하면 설정한 태그에 따라 ECR 컨테이너 이미지가 전송됨. 이렇게 API 어플리케이션 컨테이너 이미지가 ECR에 저장됨
+
+### 4.5 EKS 클러스터에 API 애플리케이션 배포
+#### 4.5.1네임스페이스 생성
+- createnamespace.yaml
+~~~yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: eks-work
+~~~
+~~~bash
+kubectl apply -f createnamespace.yaml
+~~~
+
+- kubeconfig에 네임스페이스 반영
+~~~bash
+kubectl config set-context eks-work --cluster eks-work-cluster.ap-northeast-2.eksctl.io \
+--user <AUTH INFO 값> \
+--namespace eks-work
+
+kubectl config get-contexts
+~~~
+
+- 데이터베이스 접속용 시크릿 등록
+
+~~~bash
+DB_URL=jdbc:postgresql://<RDS 엔드포인트 주소>myworkdb \
+DB_PASSWORD='<DB사용자 주소>' \
+envsubst < 21_db_config_k8s.yaml.template | \
+kubectl apply -f -
+~~~
+21_db_config_k8s.yaml.template
+
+~~~yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-app
+  labels:
+    app: backend-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-app
+  template:
+    metadata:
+      labels:
+        app: backend-app
+    spec:
+      containers:
+      - name: backend-app
+        image: ${ECR_HOST}/k8sbook/backend-app:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_URL
+          valueFrom:
+            secretKeyRef:
+              key: db-url
+              name: db-config
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: db-username
+              name: db-config
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: db-password
+              name: db-config
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /health
+          initialDelaySeconds: 15
+          periodSeconds: 30
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /health
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 250m
+            memory: 768Mi
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 2"]
+              ~~~
+- API 애플리케이션 배포
+
+~~~
+ECR_HOST=<AWS 호스트>.dkr.ecr.ap-northeast-2.amazonaws.com
+envsubst < 22_deployment_backend-app_k8s.yaml.template | \
+pipe> kubectl apply -f -
+~~~
+
+- API 애플리케이션 외부 공개
+~~~bash
+kubectl apply -f 23_service_backend-app_k8s.yaml
+~~~
+
+~~~yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-app-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: backend-app
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+~~~
+프런트엔드 애플리케이션 배포 빌드 및 배포 부터는 다음 포스팅에
