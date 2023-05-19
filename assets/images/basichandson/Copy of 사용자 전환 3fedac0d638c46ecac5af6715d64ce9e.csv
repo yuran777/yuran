@@ -1,6 +1,0 @@
-﻿명령어,설명,비고
-su,현재 사용자의 환경설정 그대로 유지하며 사용자 전환,
-su -,"clean login shell environment,",사용자 환경설정 그대로 가져옴
-sudo –i,root 사용자로 전환함,
-sudo -i -u,현재 로그인된 사용자의 패스워드인증을 통한 사용자 전환,/etc/sudoers에 등록이 되어있어야 사용 가능
-sudo,root 사용자의 권한을 임시로 빌려옴,사용자 전환 X
