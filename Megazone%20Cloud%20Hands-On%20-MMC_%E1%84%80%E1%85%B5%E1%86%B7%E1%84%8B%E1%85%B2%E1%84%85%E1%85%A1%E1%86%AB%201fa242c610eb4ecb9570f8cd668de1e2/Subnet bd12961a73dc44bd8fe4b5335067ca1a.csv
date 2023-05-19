@@ -1,3 +1,0 @@
-﻿Subnet name,Availability Zone,IPv4 CIDR block
-user_public_subnet,ap-northeast-2a,10.0.0.0/24
-user_private_subnet,ap-northeast-2a,10.0.0.0/24
