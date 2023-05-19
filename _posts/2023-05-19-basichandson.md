@@ -3,6 +3,9 @@ title: basic Hands-on aws (1/2)
 tags: aws, awsbasic
 layout: single
 ---
+
+옛날 옛적에 만들었던 핸즈온 자료 올려봅니다 ㅎㅎㅎ
+당시 나름 공들여서 만들었던것 같은데,,, 지금 보니 내용이 안맞는 부분이 쫌 있네요
 # Basic Hands-On 
 
 
