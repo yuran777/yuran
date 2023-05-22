@@ -56,8 +56,7 @@ B. 가상으로 나눠 본다고 하면
 A. 개요
 North Egress 제어:  Egress전용 VPC & Firewall & Nat Gateway & GWLB 구성
 
-Ec2 -> TGW -> (GWLBe-> GWLB) -> FW -> NAT -> IGW -> Internet
-Internet -> IGW ->  GWLBe -> GWLB -> FW -> TGW -> EC2
+EC2 -> TGW -> (GWLBe-> GWLB) -> FW -> NAT -> IGW -> Internet -> IGW ->  GWLBe -> GWLB -> FW -> TGW -> EC2
 
 South Ingress 제어(web): 각 VPC 내 생성된 Resource별 Security Group을 활용한 Ingress 제어 및 HTTP/HTTPS WAF(AWS or 3rd-party) & ALB 결합 (웹트래픽 방화벽 미경유)
 
