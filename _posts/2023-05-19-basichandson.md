@@ -17,7 +17,7 @@ layout: single
 
 ## **Architecture diagram**
 
-![/Untitled.png](assets/images/basichandson/Untitled.png)
+![/Untitled.png](_posts/assets/images/basichandson/Untitled.png)
 
 ## Summary for technical requirements
 
