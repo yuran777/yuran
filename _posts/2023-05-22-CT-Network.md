@@ -65,8 +65,23 @@ South Ingress 제어(non web): 각 VPC 내 생성된 Resource별 Security Group�
 East-West 제어: VPC 간 통신시 VPC 내부에 생성된 Resource별 Security Group/NACL을 활용한 Ingress 제어
 
 ---
+### security groups 
 
+특징
 
+- 허용할 Rule을 반드시 지정해야 통신 가능
+- 명시적 Deny Rule 지정 불가
+- 각각 inbound and outbound rules 지정 필요
+- EC2 instance 지정 가능, 인스턴스 당 5개까지 assign 가능
+- Security Groups IP addresses, subnets, prefix-list, 또는 다른 Security Group을 assign 가능
+- Security Groups는 다른 인스턴스에 적용 가능 
+
+보안 그룹을 위한 모범 사례
+- 사용하지 않거나 연결되지 않은 보안 그룹 제거 사용하지 않거나 연결되지 않은 보안 그룹이 많으면 혼란이 발생하고 잘못된 구성이 발생합니다. 사용하지 않는 보안 그룹을 제거하십시오. (PCI.EC2.341)
+- 승인된 역할에 대한 수정 제한 액세스 권한이 있는 AWS Identity and Access Management(IAM)42 역할만 보안 그룹을 수정할 수 있습니다. 보안 그룹을 변경할 권한이 있는 역할의 수를 제한하십시오. (PCI DSS 7.2.143)
+- 보안 그룹의 생성 또는 삭제 모니터링이 모범 사례는 처음 두 가지와 함께 작동합니다. 보안 그룹의 생성, 수정 및 삭제 시도를 항상 모니터링해야 합니다. (CIS AWS 기초 3.1044)
+- 아웃바운드 또는 송신 규칙을 무시하지 마십시오. 필요한 서브넷으로만 아웃바운드 액세스를 제한하십시오. 예를 들어 3계층 웹 애플리케이션에서 앱 계층은 인터넷에 대한 무제한 액세스를 허용하지 않아야 하므로 애플리케이션의 올바른 작동에 필요한 호스트 또는 서브넷에만 액세스할 수 있도록 보안 그룹을 구성합니다. (PCI DSS 1.3.445)
+- 액세스할 수 있는 인그레스 또는 인바운드 포트 범위를 제한합니다. 보안 그룹에서 열려 있는 포트를 애플리케이션이 올바르게 작동하는 데 필요한 포트로만 제한합니다. 큰 포트 범위가 열려 있으면 취약성에 노출되거나 서비스에 대한 의도하지 않은 액세스가 발생할 수 있습니다. 이것은 고위험 응용 프로그램에서 특히 중요합니다. (CIS AWS 재단 4.146, 4.247) (PCI DSS 1.2.148, 1.3.249)
 
 ## AWS Network Connectivity
 
