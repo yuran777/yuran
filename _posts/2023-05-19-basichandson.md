@@ -16,12 +16,11 @@ layout: single
 본 Hands-on에서는 AWS에서 여러 서버를 구성하여 웹페이지를 서비스하기 위한 기반 인프라 구축 방법에 대하여 설명합니다.
 
 ## **Architecture diagram**
-
-![/Untitled.png](assets/images/basichandson/Untitled.png)
+![/Untitled.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled.png)
 
 ## Summary for technical requirements
 
-[Untitled](assets/images/basichandson/Untitled%20Database%2099593cb124864fec99e17371b412264e.md)
+[Untitled](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%20Database%2099593cb124864fec99e17371b412264e.md)
 
 ##
 
