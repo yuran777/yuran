@@ -15,11 +15,11 @@ tags: aws, awsbasic
 본 Hands-on에서는 AWS에서 여러 서버를 구성하여 웹페이지를 서비스하기 위한 기반 인프라 구축 방법에 대하여 설명합니다.
 
 ## **Architecture diagram**
-![/Untitled.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled.png)
+![1](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled.png)
 
 ## Summary for technical requirements
 
-[Untitled](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%20Database%2099593cb124864fec99e17371b412264e.md)
+[2](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%20Database%2099593cb124864fec99e17371b412264e.md)
 
 ##
 
@@ -88,11 +88,11 @@ DHCP 옵션셋은 TCP/IP 네트워크 상의 호스트로 설정 정보를 전�
 
 시큐리티 그룹은 인스턴스의 앞단에서 트래픽을 제어하는 가상 방화벽인 반면, 네트워크 ACL은 서브넷 앞단에서 트래픽을 제어하는 역할을 합니다. 따라서 네트워크 ACL의 규칙을 통과하더라도 시큐리티 그룹의 규칙을 통과하지 못 하면 인스턴스와는 통신하지 못 할 수 있습니다. 이 두 가지 리소스를 통해서 안전한 네트워크 환경을 구축할 수 있습니다.
 
-- 출처: [https://www.44bits.io/ko/post/understanding_aws_vpc](https://www.44bits.io/ko/post/understanding_aws_vpc)
+- 출처: [3](https://www.44bits.io/ko/post/understanding_aws_vpc)
 
 ## 1.2 VPC(Virtual Private Cloud) 생성하기
 
-![assets/images/basichandson/image61.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image61.png)
+![4](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image61.png)
 
 - IP 주소 범위 선택 하기
 - 가용 영역(AZ)별 서브넷 설정
