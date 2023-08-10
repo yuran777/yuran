@@ -19,8 +19,7 @@ tags: aws, awsbasic
 
 ## Summary for technical requirements
 
-[2](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%20Database%2099593cb124864fec99e17371b412264e.md)
-
+![2](assets/images/basichandson/__2021-04-26_103329.png)
 ##
 
 # 1. VPC(Virtual Private Cloud) 환경 구성하기
@@ -92,7 +91,7 @@ DHCP 옵션셋은 TCP/IP 네트워크 상의 호스트로 설정 정보를 전�
 
 ## 1.2 VPC(Virtual Private Cloud) 생성하기
 
-![4](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image61.png)
+![4](assets/images/basichandson/image61.png)
 
 - IP 주소 범위 선택 하기
 - 가용 영역(AZ)별 서브넷 설정
@@ -104,19 +103,19 @@ DHCP 옵션셋은 TCP/IP 네트워크 상의 호스트로 설정 정보를 전�
 본 실습의 전 과정은 Seoul region에서 모든 작업을 수행 합니다.
 Console 화면에서 Region 을 “Asia Pacific (Seoul)”을 선택 합니다.
 
-![assets/images/basichandson/image16.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image16.png)
+![assets/images/basichandson/image16.png](assets/images/basichandson/image16.png)
 
 > “Service” -> VPC 를 선택합니다.
 
-![assets/images/basichandson/image21.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image21.png)
+![assets/images/basichandson/image21.png](assets/images/basichandson/image21.png)
 
 > “Your VPCs” -> “Create VPC”
 
-![assets/images/basichandson/image60.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image60.png)
+![assets/images/basichandson/image60.png](assets/images/basichandson/image60.png)
 
 IDC에 비유하면 네트워크의 전반적인 골격을 우리는 VPC라는 형태로 생성할 수 있습니다.
 
-![assets/images/basichandson/image44.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image44.png)
+![assets/images/basichandson/image44.png](assets/images/basichandson/image44.png)
 
 - Name tag : VPC의 이름(megazone-hands-on)
 - IPv4 CIDR block : VPC가 가지게될 IPv4 의 CIDR 대역 주소를 정의하며 RFC 1918 규격에 따라 Private IP 주소 범위에 속하는 CIDR block 을 정의하는 것을 권장 합니다.
@@ -129,11 +128,11 @@ IDC에 비유하면 네트워크의 전반적인 골격을 우리는 VPC라는 �
 
 > VPC 선택 → Edit DNS hostname 클릭 → DNS hostname 'Enable' 체크박스 선택
 
-![assets/images/basichandson/image13.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image13.png)
+![assets/images/basichandson/image13.png](assets/images/basichandson/image13.png)
 
 - DNS hostnames 는 VPC에서 AWS 리소스가 시작하는 경우 Public DNS 혹은 Private DNS 를 제공하는 옵션이며, 일반적인 운영 환경에서 enable 하신 후 사용 합니다.
 
-![assets/images/basichandson/image35.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image35.png)
+![assets/images/basichandson/image35.png](assets/images/basichandson/image35.png)
 
 여기까지 수행 하셨다면, VPC 생성이 완료된 것 입니다 😀
 
@@ -143,16 +142,16 @@ VPC 생성으로 저희는 AWS 내의 가상의 네트워크를 만들었습니�
 
 이제부터 VPC 내에서 가용 영역(Available Zone)에 따라 Subnet 을 생성해 주도록 하겠습니다.
 
-![assets/images/basichandson/image28.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image28.png)
+![assets/images/basichandson/image28.png](assets/images/basichandson/image28.png)
 
 > “Subnets” -> “Create subnet”
 
-![assets/images/basichandson/image40.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image40.png)
+![assets/images/basichandson/image40.png](assets/images/basichandson/image40.png)
 
 서브넷은 VPC의 IP 주소 범위 이며, 가용 영역(Availability Zone)에 종속 됩니다.
 아래와 같이 서브넷을 생성합니다.
 
-![assets/images/basichandson/image23.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image23.png)
+![assets/images/basichandson/image23.png](assets/images/basichandson/image23.png)
 
 - VPC ID : 서브넷을 만들고자 하는 VPC를 선택 합니다.
 - Subnet name : 서브넷의 이름을 입력할 수 있는 옵션입니다.
@@ -160,42 +159,42 @@ VPC 생성으로 저희는 AWS 내의 가상의 네트워크를 만들었습니�
 - IPv4 CIDR block : 서브넷의 IPv4 CIDR 블록을 지정합니다.
 - IPv6 CIDR block : 만약 VPC 생성 시 IPv6를 선택하셨다면 생기는 옵션 입니다.
 
-![assets/images/basichandson/image54.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image54.png)
+![assets/images/basichandson/image54.png](assets/images/basichandson/image54.png)
 
 AWS 환경에서 서브넷을 생성하였습니다.
 
 이제 아래와 같이 나머지 서브넷들도 만들어 줍니다.
 
-[Subnet](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Subnet%20bd12961a73dc44bd8fe4b5335067ca1a.md)
+[Subnet](assets/images/basichandson/Subnet%20bd12961a73dc44bd8fe4b5335067ca1a.md)
 
 subnet을 모두 2개 생성하였고, 용도에 맞게 적절하게 name과 IP 대역을 부여 하였습니다.
 
-![assets/images/basichandson/image32.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image32.png)
+![assets/images/basichandson/image32.png](assets/images/basichandson/image32.png)
 
 ### 1.2.3 인터넷 게이트웨이 생성하기
 
-![assets/images/basichandson/image34.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image34.png)
+![assets/images/basichandson/image34.png](assets/images/basichandson/image34.png)
 
 외부 엑세스를 위해 Internet gateway를 생성하겠습니다.
 
 > “Internet Gateways” -> “Create internet gateway”
 
-![assets/images/basichandson/image31.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image31.png)
+![assets/images/basichandson/image31.png](assets/images/basichandson/image31.png)
 
 아래와 같이 생성을 위한 창을 출력 됩니다.
 
-![assets/images/basichandson/image37.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image37.png)
+![assets/images/basichandson/image37.png](assets/images/basichandson/image37.png)
 
 - Name tag : Internet Gateway의 적절한 이름을 부여 합니다.
 
 인터넷 게이트웨이가 생성되게 되면, 최초 아무 VPC도 연결되지 않은 상태인 “detached” 입니다.
 방금 만든 VPC인 “User_hands-on”에 Attach 시키도록 합니다.
 
-![assets/images/basichandson/image14.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image14.png)
+![assets/images/basichandson/image14.png](assets/images/basichandson/image14.png)
 
 “Attach to VPC”를 선택하게 되면 VPC 선택할 수 있는 창이 출력 됩니다.
 
-![assets/images/basichandson/image52.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image52.png)
+![assets/images/basichandson/image52.png](assets/images/basichandson/image52.png)
 
 - VPC : 연결하시고자 하시는 VPC를 선택합니다. 실습간에는 “user-custom-vpc” VPC를 선택합니다.
 
@@ -205,24 +204,24 @@ subnet을 모두 2개 생성하였고, 용도에 맞게 적절하게 name과 IP 
 
 > “Route Tables” -> “Create route table”
 
-![assets/images/basichandson/image43.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image43.png)
+![assets/images/basichandson/image43.png](assets/images/basichandson/image43.png)
 
 - Name tag : route table 의 적절한 이름을 정의 합니다.
 - VPC : 라우팅 테이블이 속할 VPC를 정의합니다.
 
 방금까지는 라우팅 테이블이라는 “표” 를 생성하였다고 생각하시면 됩니다.
 
-![assets/images/basichandson/Untitled%201.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%201.png)
+![assets/images/basichandson/Untitled%201.png](assets/images/basichandson/Untitled%201.png)
 
 생성된 Route table 에 모든 트래픽은 인터넷 게이트웨이로 통할 수 있는 정책을 정의하겠습니다.
 
 > “생성된 라우트 테이블 선택“ -> “Routes” -> “Edit routes”
 
-![assets/images/basichandson/Untitled%202.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%202.png)
+![assets/images/basichandson/Untitled%202.png](assets/images/basichandson/Untitled%202.png)
 
 “Edit routes”를 클릭하시게 되면 아래와 같은 창이 출력 됩니다.
 
-![assets/images/basichandson/image47.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image47.png)
+![assets/images/basichandson/image47.png](assets/images/basichandson/image47.png)
 
 - Destination : 목적지를 입력 합니다. 참고로 0.0.0.0/0 은 모든 트래픽을 의미 합니다.
 - Target : VPC가 제공하는 여러 Gateway Service를 정의합니다. 여기서는 인터넷 게이트웨이를 정의함으로써 해당 라우팅 테이블을 참조하는 서브넷은 Public zone 이 되는 것 입니다
@@ -232,11 +231,11 @@ subnet을 모두 2개 생성하였고, 용도에 맞게 적절하게 name과 IP 
 
 > 라우팅 테이블 선택 -> “Subnet Associations” -> “Edit subnet associations”
 
-![assets/images/basichandson/image25.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image25.png)
+![assets/images/basichandson/image25.png](assets/images/basichandson/image25.png)
 
 “Edit subnet associations”를 클릭하시게 되면 아래와 같은 창이 출력 됩니다.
 
-![assets/images/basichandson/image24.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image24.png)
+![assets/images/basichandson/image24.png](assets/images/basichandson/image24.png)
 
 - Associated subnets : 선택한 라우팅 테이블과 연관될 서브넷을 정의 합니다.
 
@@ -248,11 +247,11 @@ Private subnet 을 생성하기 이전에, Private subnet 의 외부로 가는 �
 
 > “NAT Gateways” -> “Create NAT Gateway” 선택.
 
-![assets/images/basichandson/image45.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image45.png)
+![assets/images/basichandson/image45.png](assets/images/basichandson/image45.png)
 
 NAT Gateway를 생성하겠습니다.
 
-![assets/images/basichandson/image4.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image4.png)
+![assets/images/basichandson/image4.png](assets/images/basichandson/image4.png)
 
 - Subnet : NAT Gateway는 반드시 Public zone에 위치한 서브넷에 존재하여야 합니다. 이전에 생성한 user_public_subnet의 Subnet ID를 명시하겠습니다.
 - Elastic IP Allocation ID : 공인 IP를 선택하시거나, 새로운 공인 IP를 발급 받아 적용합니다.
@@ -262,11 +261,11 @@ NAT Gateway를 생성하겠습니다.
 
 > “Route Tables” -> “Create route table”
 
-![assets/images/basichandson/image43.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image43.png)
+![assets/images/basichandson/image43.png](assets/images/basichandson/image43.png)
 
 “Create route table”을 클릭하시게 되면 아래와 같은 창이 출력 됩니다.
 
-![assets/images/basichandson/image59.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image59.png)
+![assets/images/basichandson/image59.png](assets/images/basichandson/image59.png)
 
 > 생성된 라우팅 테이블 선택 -> “Routes” -> “Edit routes”
 
@@ -275,17 +274,17 @@ NAT Gateway를 생성하겠습니다.
 - Destination : 목적지를 입력 합니다. 참고로 여기서의 0.0.0.0/0 은 모든 트래픽을 의미 합니다.
 - Target : VPC가 제공하는 여러 Gateway Service를 정의합니다. 여기서는 NAT Gateway 를 정의함으로써 해당 라우팅 테이블을 참조하는 서브넷은 Private zone 이 되는 것 입니다.
 
-  ![assets/images/basichandson/image46.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image46.png)
+  ![assets/images/basichandson/image46.png](assets/images/basichandson/image46.png)
 
 목적지가 A 가용 영역에 있는 라우팅 테이블을 A 가용 영역의 subnet 에 연결해 보겠습니다. 실습 아키텍처로는 “10.200.3.0/24” 가 A 가용 영역에 있는 서브넷 입니다.
 
 > 라우팅 테이블 선택 -> “Subnet Associations” -> “Edit subnet associations”
 
-![assets/images/basichandson/__2021-04-26_103329.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_103329.png)
+![assets/images/basichandson/__2021-04-26_103329.png](assets/images/basichandson/__2021-04-26_103329.png)
 
 “Edit subnet associations”를 클릭하면 아래와 같이 출력 됩니다.
 
-![assets/images/basichandson/image53.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image53.png)
+![assets/images/basichandson/image53.png](assets/images/basichandson/image53.png)
 
 private 서브넷인 “10.0.1.0/24” 를 선택합니다.
 
@@ -296,11 +295,11 @@ private 서브넷인 “10.0.1.0/24” 를 선택합니다.
 
 Public subnet 의 경우에는 서브넷에 생성된 리소스에 대하여 자동으로 Public IP를 할당하기 위한 설정을 합니다.
 
-![assets/images/basichandson/image33.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image33.png)
+![assets/images/basichandson/image33.png](assets/images/basichandson/image33.png)
 
 “Modify auto-assign IP settings”을 클릭하면 아래와 같은 창이 출력 됩니다.
 
-![assets/images/basichandson/image9.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image9.png)
+![assets/images/basichandson/image9.png](assets/images/basichandson/image9.png)
 
 이로써 해당 서브넷에 생성되는 AWS 리소스들은 자동으로 Public IP를 가지게 됩니다. 참고로 Public IP들은 Amazon 이 가지고 있는 IPv4 pool 에서 random IP가 자동으로 할당되며, 해당 리소스가 STOP&START 혹은 재 생성되면 IP가 변경이 되는 특징이 있습니다.
 
@@ -319,7 +318,7 @@ Amazon Elastic Compute Cloud(Amazon EC2)는 AWS 클라우드에서 확장 가능
 
 ## 2.2 EC2 인스턴스 생성하기
 
-![assets/images/basichandson/Untitled.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled.png)
+![assets/images/basichandson/Untitled.png](assets/images/basichandson/Untitled.png)
 
 모든 실습의 EC2는 “Amazon Linux AMI” 를 기준으로 생성합니다.
 
@@ -329,13 +328,13 @@ Amazon Elastic Compute Cloud(Amazon EC2)는 AWS 클라우드에서 확장 가능
 
 > “Services” -> “EC2” 선택 OR [https://console.aws.amazon.com/ec2/](https://console.aws.amazon.com/ec2/) 클릭
 
-![assets/images/basichandson/image57.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image57.png)
+![assets/images/basichandson/image57.png](assets/images/basichandson/image57.png)
 
 이 콘솔 페이지는 Ec2와 관련된 모든 설정을 하는 페이지 입니다.
 
 > “Instances” -> “Launch Instance”
 
-![assets/images/basichandson/image39.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image39.png)
+![assets/images/basichandson/image39.png](assets/images/basichandson/image39.png)
 
 “Launch Instance”를 클릭하게 되면 아래 7가지 과정을 통하여 인스턴스를 생성할 수 있습니다.
 
@@ -351,22 +350,22 @@ AMI(Amazon Machine Image) 는 클라우드의 가상 서버인 인스턴스를 �
 
 > “Quick Start” -> Amazon Linux AMI -> “Select”
 
-![assets/images/basichandson/image26.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image26.png)
+![assets/images/basichandson/image26.png](assets/images/basichandson/image26.png)
 
 > “t2.micro” -> “Next: Configure Instance Details”
 
 **Instance Type을 정의합니다.**
 
-![assets/images/basichandson/image5.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image5.png)
+![assets/images/basichandson/image5.png](assets/images/basichandson/image5.png)
 
 인스턴스 타입은 00000일 기준 약 00개 정도 있습니다.
 사용자는 Ec2 인스턴스에서 실행될 어플리케이션의 워크로드에 따라 인스턴스 타입과 크기를 정의하여야 합니다.
 
 **생성될 인스턴스의 세부 설정을 정의 합니다.**
 
-![assets/images/basichandson/image12.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image12.png)
+![assets/images/basichandson/image12.png](assets/images/basichandson/image12.png)
 
-![assets/images/basichandson/image30.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image30.png)
+![assets/images/basichandson/image30.png](assets/images/basichandson/image30.png)
 
 - Number of instances : 생성될 인스턴스의 갯수 입니다.
 - Purchasing option : Spot Instance 를 사용할 것인지를 정의 합니다.
@@ -388,7 +387,7 @@ AMI(Amazon Machine Image) 는 클라우드의 가상 서버인 인스턴스를 �
 
 **인스턴스의 스토리지를 정의합니다.**
 
-![assets/images/basichandson/Untitled%203.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%203.png)
+![assets/images/basichandson/Untitled%203.png](assets/images/basichandson/Untitled%203.png)
 
 Ec2 Instance의 어떤 OS를 선택하시든 boot partition 은 반드시 필요합니다.
 
@@ -398,13 +397,13 @@ Ec2 Instance의 어떤 OS를 선택하시든 boot partition 은 반드시 필요
 
 **인스턴스의 Tag 를 기록 합니다.**
 
-![assets/images/basichandson/image55.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image55.png)
+![assets/images/basichandson/image55.png](assets/images/basichandson/image55.png)
 
 인스턴스의 Tag는 일반적으로 사용자 혹은 시스템에서 용도 별로 구분하기 위해 사용합니다.
 
 **인스턴스의 보안 그룹을 정의 합니다.**
 
-![assets/images/basichandson/Untitled%204.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%204.png)
+![assets/images/basichandson/Untitled%204.png](assets/images/basichandson/Untitled%204.png)
 
 Security Group은 IDC 환경의 방화벽과 유사하게 동작하는 논리 방화벽 입니다.
 Security Group은 수 많은 프로토콜을 지원하며 IP와 Port base 로 들어오는 트래픽과 나가는 트래픽에 대해 “명시적인 허용” 만을 설정 할 수 있으며, 예외사항으로 정책의 허용으로 들어온 트래픽에 대해서는 허용 하지 않습니다.
@@ -421,18 +420,18 @@ Security Group은 수 많은 프로토콜을 지원하며 IP와 Port base 로 �
 
 **마지막 인스턴스를 런치하기 전 설정 사항을 확인 합니다.**
 
-![assets/images/basichandson/Untitled%205.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%205.png)
+![assets/images/basichandson/Untitled%205.png](assets/images/basichandson/Untitled%205.png)
 
 AWS 에서는 기본적으로 Key pair 방식으로 인스턴스의 접근을 제어 합니다.
 인스턴스에 접속할 수 있는 유일한 수단이므로 키 관리가 중요 하며, 생성된 키를 분실 하셨을 경우 별도의 작업을 하지 않는 이상 인스턴스에 접근이 불가합니다.
 
 > “Key pair name” 의 이름을 정의 -> “Download Key Pair” -> “Launch Instances”
 
-![assets/images/basichandson/image7.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/image7.png)
+![assets/images/basichandson/image7.png](assets/images/basichandson/image7.png)
 
 이렇게 설정 키페어까지 선택 한 후 'Launch Instance' 를 클릭 하면 아래와 같은 인스턴스 시작 상태를 확인 할 수 있습니다.
 
-![assets/images/basichandson/Untitled%206.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%206.png)
+![assets/images/basichandson/Untitled%206.png](assets/images/basichandson/Untitled%206.png)
 
 인스턴스를 시작할 때 초기 상태(Instance State)는 pending입니다. 인스턴스가 시작된 후에는 Instance State가 running으로 바뀌고 퍼블릭 DNS를 받습니다.
 
@@ -443,19 +442,19 @@ AWS 에서는 기본적으로 Key pair 방식으로 인스턴스의 접근을 �
 - Instance Type: t3.xlarge
 - subnet→ private subnet 선택
 
-![assets/images/basichandson/Untitled%207.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%207.png)
+![assets/images/basichandson/Untitled%207.png](assets/images/basichandson/Untitled%207.png)
 
-![assets/images/basichandson/Untitled%208.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%208.png)
+![assets/images/basichandson/Untitled%208.png](assets/images/basichandson/Untitled%208.png)
 
-![assets/images/basichandson/Untitled%209.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%209.png)
+![assets/images/basichandson/Untitled%209.png](assets/images/basichandson/Untitled%209.png)
 
-![assets/images/basichandson/Untitled%2010.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%2010.png)
+![assets/images/basichandson/Untitled%2010.png](assets/images/basichandson/Untitled%2010.png)
 
-![assets/images/basichandson/Untitled%2011.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%2011.png)
+![assets/images/basichandson/Untitled%2011.png](assets/images/basichandson/Untitled%2011.png)
 
-![assets/images/basichandson/Untitled%2012.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%2012.png)
+![assets/images/basichandson/Untitled%2012.png](assets/images/basichandson/Untitled%2012.png)
 
-![assets/images/basichandson/Untitled%2013.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%2013.png)
+![assets/images/basichandson/Untitled%2013.png](assets/images/basichandson/Untitled%2013.png)
 
 ## 2.3 Amazon EC2(Elastic Compute Cloud) 접속하기
 
@@ -467,11 +466,11 @@ AWS 에서는 기본적으로 Key pair 방식으로 인스턴스의 접근을 �
 
 > “Network & Security → “Security Groups” → 해당 Security Group 선택 → “Edit inbound rules”
 
-![assets/images/basichandson/__2021-04-26_113015.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_113015.png)
+![assets/images/basichandson/__2021-04-26_113015.png](assets/images/basichandson/__2021-04-26_113015.png)
 
-![assets/images/basichandson/Untitled%2014.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%2014.png)
+![assets/images/basichandson/Untitled%2014.png](assets/images/basichandson/Untitled%2014.png)
 
-![assets/images/basichandson/Untitled%2015.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%2015.png)
+![assets/images/basichandson/Untitled%2015.png](assets/images/basichandson/Untitled%2015.png)
 
 ---
 
@@ -499,39 +498,39 @@ AWS 에서는 기본적으로 Key pair 방식으로 인스턴스의 접근을 �
 3.  puttygen.exe 실행
 4.  Type of key to generate Type RSA 선택 후 Load 버튼 클릭
 
-    ![assets/images/basichandson/__2021-04-26_150119.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_150119.png)
+    ![assets/images/basichandson/__2021-04-26_150119.png](assets/images/basichandson/__2021-04-26_150119.png)
 
 5.  파일 종류 All Files 로 변경 후 인스턴스 생성시 사용했던 .pem 파일 선택 후 열기
 
-    ![assets/images/basichandson/__2021-04-26_151518.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_151518.png)
+    ![assets/images/basichandson/__2021-04-26_151518.png](assets/images/basichandson/__2021-04-26_151518.png)
 
 6.  Save private key 선택 후 .ppk 파일로 키 저장
 
-    ![assets/images/basichandson/__2021-04-26_152324.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_152324.png)
+    ![assets/images/basichandson/__2021-04-26_152324.png](assets/images/basichandson/__2021-04-26_152324.png)
 
 **PuTTY로 인스턴스에 연결**
 
 Instance → 접속 할 인스턴스 클릭 → Action → Connect
 
-![assets/images/basichandson/__2021-04-26_153756.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_153756.png)
+![assets/images/basichandson/__2021-04-26_153756.png](assets/images/basichandson/__2021-04-26_153756.png)
 
 1. Connect to your instance using its Public DNS 주소 복사
 
-![assets/images/basichandson/__2021-04-26_155245.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_155245.png)
+![assets/images/basichandson/__2021-04-26_155245.png](assets/images/basichandson/__2021-04-26_155245.png)
 
 2. PuTTY 실행
 
-![assets/images/basichandson/__2021-04-26_162817.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_162817.png)
+![assets/images/basichandson/__2021-04-26_162817.png](assets/images/basichandson/__2021-04-26_162817.png)
 
 Session → Host Name에 아까 복사한 DNS 주소 입력
 
 Security Group 중 인바운드 규칙 허용해준 포트 번호 입력
 
-![assets/images/basichandson/__2021-04-26_163214.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_163214.png)
+![assets/images/basichandson/__2021-04-26_163214.png](assets/images/basichandson/__2021-04-26_163214.png)
 
 Connection → SSH → Auth 클릭하여 Private key file for authentication 에 아까 .ppk 파일로 변환한 파일 넣기
 
-![assets/images/basichandson/Untitled%2016.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled%2016.png)
+![assets/images/basichandson/Untitled%2016.png](assets/images/basichandson/Untitled%2016.png)
 
 세팅 완료 후 save 후 터미널 접근
 
@@ -598,9 +597,9 @@ ssh –i xxxx.pem ec2-user@EC2 Host Name or EIP
   - SUSE AMI의 경우 사용자 이름은 ec2-user 또는 root입니다.
   - Ubuntu AMI의 경우 사용자 이름은 ubuntu입니다.
 
-![assets/images/basichandson/__2021-04-26_165826.png](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/__2021-04-26_165826.png)
+![assets/images/basichandson/__2021-04-26_165826.png](assets/images/basichandson/__2021-04-26_165826.png)
 
-[프라이빗 / 퍼블릭 키 배포관련](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/%E1%84%91%E1%85%B3%E1%84%85%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%87%E1%85%B5%E1%86%BA%20%E1%84%91%E1%85%A5%E1%84%87%E1%85%B3%E1%86%AF%E1%84%85%E1%85%B5%E1%86%A8%20%E1%84%8F%E1%85%B5%20%E1%84%87%E1%85%A2%E1%84%91%E1%85%A9%E1%84%80%E1%85%AA%E1%86%AB%E1%84%85%E1%85%A7%E1%86%AB%20b7960d3422c840dcb6712007ca16b570.md)
+[프라이빗 / 퍼블릭 키 배포관련](assets/images/basichandson/%E1%84%91%E1%85%B3%E1%84%85%E1%85%A1%E1%84%8B%E1%85%B5%E1%84%87%E1%85%B5%E1%86%BA%20%E1%84%91%E1%85%A5%E1%84%87%E1%85%B3%E1%86%AF%E1%84%85%E1%85%B5%E1%86%A8%20%E1%84%8F%E1%85%B5%20%E1%84%87%E1%85%A2%E1%84%91%E1%85%A9%E1%84%80%E1%85%AA%E1%86%AB%E1%84%85%E1%85%A7%E1%86%AB%20b7960d3422c840dcb6712007ca16b570.md)
 
 ## 2.4 Amazon EC2(Elastic Compute Cloud) 접속하여 계정 설정하기
 
@@ -624,14 +623,14 @@ ssh –i xxxx.pem ec2-user@EC2 Host Name or EIP
   `cat /etc/group` 그룹
   `cat /etc/login.def` 패스워드 유효기간, 디렉토리 자동 생성 등
 
-  [Copy of 명령어](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Copy%20of%20%E1%84%86%E1%85%A7%E1%86%BC%E1%84%85%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A5%20c6b516f1989e4de68a10256eb1434320.md)
+  [Copy of 명령어](assets/images/basichandson/Copy%20of%20%E1%84%86%E1%85%A7%E1%86%BC%E1%84%85%E1%85%A7%E1%86%BC%E1%84%8B%E1%85%A5%20c6b516f1989e4de68a10256eb1434320.md)
 
   **사용자 및 그룹 관리 파일**
 
   - /etc/skel : 사용자에 대한 기본적인 초기화 파일들이 저장되어 있음.
   - /etc/login.defs : 사용자나 그룹을 생성할 때 참고하는 기본 값들이 저장되어 있음.
 
-  [Copy of 사용자 전환](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Copy%20of%20%E1%84%89%E1%85%A1%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%8C%E1%85%A1%20%E1%84%8C%E1%85%A5%E1%86%AB%E1%84%92%E1%85%AA%E1%86%AB%203fedac0d638c46ecac5af6715d64ce9e.md)
+  [Copy of 사용자 전환](assets/images/basichandson/Copy%20of%20%E1%84%89%E1%85%A1%E1%84%8B%E1%85%AD%E1%86%BC%E1%84%8C%E1%85%A1%20%E1%84%8C%E1%85%A5%E1%86%AB%E1%84%92%E1%85%AA%E1%86%AB%203fedac0d638c46ecac5af6715d64ce9e.md)
 
 0. hostname 변경(해도되고 안해도 됨)
 
