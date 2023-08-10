@@ -15,7 +15,7 @@ tags: aws, awsbasic
 본 Hands-on에서는 AWS에서 여러 서버를 구성하여 웹페이지를 서비스하기 위한 기반 인프라 구축 방법에 대하여 설명합니다.
 
 ## **Architecture diagram**
-![1](https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled.png)
+![https://github.com/yuran777/yuran777.github.io/blob/master/_posts/assets/images/basichandson/Untitled.png](https://github.com/yuran777/yuran777.github.io/blob/338b7a93620ea21d299c69666fc0430cbfde4adf/_posts/assets/images/basichandson/Untitled.png))
 
 ## Summary for technical requirements
 
