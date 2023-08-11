@@ -3,10 +3,12 @@ layout: single
 title:  "aws 침해 대응 워크샵 (Intro)"
 tags:
   - aws
+  - incidentResponse
+  - security
+  - 침해사고 대응
 categories:
-  - aws 
-toc_sticky: true
-toc_label: "페이지 주요 목차"
+  - aws
+  - security
 
 ---
 
