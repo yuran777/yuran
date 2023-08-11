@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "aws 침해 대응 워크샵 (공격 시뮬레이션 세부내용)"
+title:  "aws 침해 대응 워크샵 (공격 시뮬레이션 환경 setting)"
 tags:
   - aws
   - incidentResponse
