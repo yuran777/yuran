@@ -1,3 +1,4 @@
+---
 layout: single
 title:  "aws 침해 대응 워크샵 (공격 시뮬레이션 세부내용)"
 tags:
@@ -8,6 +9,8 @@ tags:
 categories:
   - aws
   - security
+
+---
 ### 2-1 Session Manager를 통해 Malicious Host로 접속
 
 system Manager > Session Manger 
