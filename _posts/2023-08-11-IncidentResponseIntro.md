@@ -1,3 +1,4 @@
+---
 layout: single
 title:  "aws 침해 대응 워크샵 (공격 시뮬레이션 개요)"
 tags:
@@ -8,6 +9,7 @@ tags:
 categories:
   - aws
   - security
+---
 
 공격 시뮬레이션 개요
 
