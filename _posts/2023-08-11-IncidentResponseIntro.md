@@ -14,6 +14,7 @@ categories:
 공격 시뮬레이션 개요
 
 이번 단계에서 진행할 공격 과정은 다음 그림처럼 일반적으로 AWS 상에서 많이 시도되는 전형적인 침해 유형을 반영하여 구성되어 있습니다
+
 ![](https://velog.velcdn.com/images/yuran3391/post/236bf44f-c854-4c02-bfbc-6ce2318773a5/image.png)
 
 
