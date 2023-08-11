@@ -1,3 +1,15 @@
+---
+layout: single
+title:  "aws 침해 대응 워크샵 (Intro)"
+tags:
+  - aws
+categories:
+  - aws 
+toc_sticky: true
+toc_label: "페이지 주요 목차"
+
+---
+
 본 실습과정에서는 NIST CSF 프레임웍의 Detect, Respond, Recover 및 AWS CAF 프레임웍의 Detective, Responsive 영역에 해당하는 시나리오를 진행하게 됩니다.
 
  NIST CSF 프레임웍의 Detect, Respond, Recover
