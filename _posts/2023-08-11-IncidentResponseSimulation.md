@@ -9,6 +9,8 @@ tags:
 categories:
   - aws
   - security
+toc: true
+toc_sticky: true
 
 ---
 ### 2-1 Session Manager를 통해 Malicious Host로 접속
