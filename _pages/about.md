@@ -7,7 +7,7 @@ layout: single
 
 ### Contact.
 
-Email. yuran3391@gmail.com
+Email. [yuran3391@gmail.com](yuran3391@gmail.com)
 
 
 ### Channel.
