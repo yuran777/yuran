@@ -4,6 +4,18 @@ permalink: /about/
 layout: single
 ---
 
-## ABOUT
-ABOUT
-ABOUT
+
+### Contact.
+
+Email. yuran3391@gmail.com
+
+
+### Channel.
+
+Blog. [https://yuran777.github.io/](https://yuran777.github.io/)
+
+velog. [https://velog.io/@yuran3391](https://velog.io/@yuran3391)
+
+linkedin. [https://www.linkedin.com/in/yrkim123/](https://www.linkedin.com/in/yrkim123/)
+
+Blog. [https://blog.naver.com/kimkim615](https://blog.naver.com/kimkim615)
