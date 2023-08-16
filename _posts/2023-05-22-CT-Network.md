@@ -2,6 +2,10 @@
 titl: CT Basic - Network 
 tags: security, aws
 categories: aws, security, basic
+
+toc: true
+toc_sticky: true
+
 ---
 ## AWS Network Segmentation
 
