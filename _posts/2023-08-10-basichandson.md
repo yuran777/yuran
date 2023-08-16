@@ -1,6 +1,10 @@
 ---
 title: basic Hands-on aws (1/2)
 tags: aws, awsbasic
+
+toc: true
+toc_sticky: true
+
 ---
 
 옛날 옛적에 만들었던 핸즈온 자료 올려봅니다 ㅎㅎㅎ
