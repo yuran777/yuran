@@ -1,6 +1,10 @@
 ---
 layout: single
 title:  "고전 암호"
+
+toc: true
+toc_sticky: true
+
 ---
 
 ## 고전 암호 기술
