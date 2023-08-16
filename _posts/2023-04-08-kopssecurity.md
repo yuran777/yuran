@@ -1,8 +1,9 @@
 ---
 layout: single
 title:  "[PKOS STUDY #5] - 쿠버네티스 보안"
+toc: true
 toc_sticky: true
-toc_label: "페이지 주요 목차"
+
 
 ---
 
