@@ -166,7 +166,7 @@ Resource Based Policy 는 자원에 할당되는 정책이니 해당 리소스�
 
 
 
-# 5. IAM Best Practice
+## 5. IAM Best Practice
 - 1. Root 사용자 사용 금지
 -  2. 권한 높은 IAM User에 대해서는 MFA 활성화
 -  3. IAM User 키에 대한 주기적인 교체
