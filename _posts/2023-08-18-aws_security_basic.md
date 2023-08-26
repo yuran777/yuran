@@ -1,11 +1,8 @@
 ---
 layout: single
-title:  "aws 보안 기본"
+title:  "aws IAM"
 tags:
   - aws
-  - security
-  - cloudwatch
-  - cloudtrail
   - iam
   - policy
 categories:
@@ -16,13 +13,17 @@ toc_sticky: true
 
 ---
 
+# IAM (Identity And access Management) 
+거의 AWS의 끝과 시작이라 할 수 있다! 
+누가 (사용자/ 어플리케이션/ Role) 무엇에(AWS 리소스) 접근할(권한) 수 있는가를 정의하는 것!!
 
+- 
 ![](https://velog.velcdn.com/images/yuran3391/post/376d8962-8ff9-42a9-8cc3-530669f02dbf/image.png)
 
 # 1. Identity (인증)
 ## 누구세요?
 - IAM Principal은 AWS 어카운트 내에 정의된 **요청 주체**를 말함
-- aws에서의 보안 주체는 aws 어카운트내에 정의된 identity를 의미하는 것으로, 크게 IAM User와 IAM Role로 나눌 수 있음/
+- aws에서의 보안 주체는 aws 어카운트내에 정의된 identity를 의미하는 것으로, 크게 Root User , IAM User와 IAM Role, Application으 로 나눌 수 있음/
 
 ### 1.1 IAM User
 - 실 사용자 기준으로 통제할 때 IAM User로 인증하며(**상시 자격증명**) 주로 IAM Group으로 관리
@@ -37,7 +38,15 @@ toc_sticky: true
 
 #### 1.1.2 IAM 사용자 유형
 - Root User
+  모든 권한을 갖고 있음
+  계정 생성 후 사용하지 않는 것을 권장
 - IAM User
+  장기 자격 증명 (access key / secret key)
+  주로 IAM 그룹으로 그룹화하여 관리
+- Role
+  임시 자격 증명 (Access Key / Secret Key / Token)
+  정의된 권한 범위 내 AWS API를 사용 가능
+- 
 ![](https://velog.velcdn.com/images/yuran3391/post/4766e841-0fcc-4910-9dcc-e1dc145b8771/image.png)
 
 ### 1.2 IAM Role
