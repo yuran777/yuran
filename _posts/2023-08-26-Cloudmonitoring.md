@@ -1,4 +1,17 @@
-f---
+---
+layout: single
+title:  "aws Monitoring  "
+tags:
+  - aws
+  - monitoting
+categories:
+  - aws
+  - security
+toc: true
+toc_sticky: true
+
+---
+
 # 3. CloudTrail
 모든 api 콜에 대해 기록
 ![](https://velog.velcdn.com/images/yuran3391/post/5c63bfcf-704a-49d8-a38e-53764ae11d57/image.png)
