@@ -167,14 +167,14 @@ Resource Based Policy 는 자원에 할당되는 정책이니 해당 리소스�
 
 
 # 5. IAM Best Practice
-### 1. Root 사용자 사용 금지
-### 2. 권한 높은 IAM User에 대해서는 MFA 활성화
-### 3. IAM User 키에 대한 주기적인 교체
-### 4. IAM User에 최소 권한 할당
-- Access Advisor 를 활용해 일정 기간동안 접근하지 않은 사용자에 대해 점차적 권한 제거
-- Access Analyzer로 권한이 과도하게 주어진 리소스 판별
-- IAM Credential report 활용
-- IAM Policy Simulator로 IAM Policy 사전 검증
+- 1. Root 사용자 사용 금지
+-  2. 권한 높은 IAM User에 대해서는 MFA 활성화
+-  3. IAM User 키에 대한 주기적인 교체
+-  4. IAM User에 최소 권한 할당
+	- Access Advisor 를 활용해 일정 기간동안 접근하지 않은 사용자에 대해 점차적 권한 제거
+	- Access Analyzer로 권한이 과도하게 주어진 리소스 판별
+	- IAM Credential report 활용
+	- IAM Policy Simulator로 IAM Policy 사전 검증
 
 https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
 
