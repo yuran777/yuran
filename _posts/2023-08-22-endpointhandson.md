@@ -1,7 +1,6 @@
 ---
 layout: single
-title:  "aws endpoint 실습 -  SSM과 S3 EP 사용하는 환경 구성
- "
+title:  "aws endpoint 실습 -  AWS Session Manager를 통한 Bastion Server 대체 및 s3 Endpoint 생성을 통한 안전한 private 환경 접근  "
 tags:
   - aws
   - ssm
