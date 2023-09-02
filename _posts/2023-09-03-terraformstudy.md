@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "[t101-3기] Terraform 스터디 1주차"
+title:  "(t101-3기) Terraform 스터디 1주차"
 tags:
   - terraform
 
@@ -10,7 +10,6 @@ categories:
     
 toc: true
 toc_sticky: true
-
 ---
 
 본 시리즈는 T101(테라폼으로 시작하는 IaC) 3기 진행 내용입니다. 
