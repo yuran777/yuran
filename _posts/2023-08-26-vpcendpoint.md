@@ -1,6 +1,6 @@
 ---
 layout: single
-title:  "aws IAM"
+title:  "VPC Endpoint"
 tags:
   - aws
   - endpoint
