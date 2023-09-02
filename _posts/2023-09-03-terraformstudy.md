@@ -21,7 +21,6 @@ https://www.yes24.com/Product/Goods/119179333
 실습 코드
 https://github.com/terraform101
  
----
 **테라폼** : 하시코프사에서 공개한 IaC 도구
 
 ‘하시코프의 철학’ 중 3가지를 담아서 테라폼을 설계 : 워크플로우에 집중, 코드형 인프라, 실용주의
