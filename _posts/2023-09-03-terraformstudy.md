@@ -1,13 +1,13 @@
 ---
 layout: single
-title:  "t101-3기 Terraform 스터디 1주차"
+title:  "[t101-3기] Terraform 스터디 1주차"
 tags:
   - terraform
-  - aws
 
 categories:
   - aws
   - terraform
+    
 toc: true
 toc_sticky: true
 
