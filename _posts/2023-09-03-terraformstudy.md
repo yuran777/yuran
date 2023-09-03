@@ -238,6 +238,7 @@ terraform graph > graph.dot
 1. 디렉토리 생성
 
 2. main.tf 코드
+   
 ```
 provider "aws" {
   region = "ap-northeast-2"
@@ -294,10 +295,10 @@ output "public_ip" {
   description = "The public IP of the Instance"
 }											
 ```
-실행
-```
 
-terraform init
+실행
+
+```terraform init
 terraform plan
 terraform apply
 ```
